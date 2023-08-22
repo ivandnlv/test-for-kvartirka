@@ -1,0 +1,33 @@
+.tabs {
+  margin-top: 8px;
+  display: flex;
+  gap: 6px;
+  button {
+    cursor: pointer;
+    background: none;
+    border: none;
+    outline: none;
+    color: #fff;
+    &:first-of-type {
+      position: relative;
+      &::after {
+        content: '';
+        position: absolute;
+        display: block;
+        right: -4px;
+        top: 50%;
+        background: #fff;
+        height: 12px;
+        width: 1px;
+        transform: translateY(-50%);
+      }
+    }
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+.active {
+  font-weight: 700;
+}
