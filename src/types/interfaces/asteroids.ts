@@ -4,4 +4,5 @@ export interface Asteroid {
   endDate: string;
   isDanger: boolean;
   radius: number;
+  id: string;
 }

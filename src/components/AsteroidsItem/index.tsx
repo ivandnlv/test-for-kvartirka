@@ -1,3 +1,6 @@
+'use client';
+
+import { useState } from 'react';
 import { Asteroid } from '@/types/interfaces';
 import styles from './AsteroidsItem.module.scss';
 import Image from 'next/image';
@@ -10,40 +13,59 @@ import Btn from '../UI/Btn';
 interface AsteroidsItemProps {
   asteroid: Asteroid;
   measurementUnit: 'km' | 'lo';
+  addToCart: (asteroid: Asteroid) => void;
+  deleteFromCart: (asteroid: Asteroid) => void;
 }
 
 type NormalDate = [number, string, number];
 
-const AsteroidsItem = ({ asteroid, measurementUnit }: AsteroidsItemProps) => {
-  const formatDate = (): NormalDate => {
-    const endDate = new Date(asteroid.endDate);
+const formatDate = (asteroid: Asteroid): NormalDate => {
+  const endDate = new Date(asteroid.endDate);
 
-    const monthsCodes = [
-      'янв',
-      'фев',
-      'март',
-      'апр',
-      'май',
-      'июнь',
-      'июль',
-      'авг',
-      'сент',
-      'окт',
-      'нояб',
-      'дек',
-    ];
+  const monthsCodes = [
+    'янв',
+    'фев',
+    'март',
+    'апр',
+    'май',
+    'июнь',
+    'июль',
+    'авг',
+    'сент',
+    'окт',
+    'нояб',
+    'дек',
+  ];
 
-    const formattedDate: NormalDate = [
-      endDate.getDate(),
-      monthsCodes[endDate.getMonth()],
-      endDate.getFullYear(),
-    ];
+  const formattedDate: NormalDate = [
+    endDate.getDate(),
+    monthsCodes[endDate.getMonth()],
+    endDate.getFullYear(),
+  ];
 
-    return formattedDate;
-  };
+  return formattedDate;
+};
 
-  const normalDate = formatDate();
+const AsteroidsItem = ({
+  asteroid,
+  measurementUnit,
+  addToCart,
+  deleteFromCart,
+}: AsteroidsItemProps) => {
+  const normalDate = formatDate(asteroid);
   const asteroidSize = asteroid.radius >= 10000 ? 'big' : 'small';
+
+  const [isInCart, setIsInCart] = useState(false);
+
+  const onBtnClick = () => {
+    if (isInCart) {
+      deleteFromCart(asteroid);
+      setIsInCart(false);
+    } else {
+      addToCart(asteroid);
+      setIsInCart(true);
+    }
+  };
 
   return (
     <div className={styles.asteroid}>
@@ -69,8 +91,8 @@ const AsteroidsItem = ({ asteroid, measurementUnit }: AsteroidsItemProps) => {
           </div>
         </div>
       </div>
-      <div className={styles.bottom}>
-        <Btn title="ЗАКАЗАТЬ" click={() => alert('Заглушка')} />
+      <div className={isInCart ? styles.bottom + ' ' + styles.inCart : styles.bottom}>
+        <Btn title={isInCart ? 'В корзине' : 'Заказать'} click={onBtnClick} />
         {asteroid.isDanger ? (
           <span>
             <Image src={dangerIconPath} alt="⚠" />

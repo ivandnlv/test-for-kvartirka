@@ -2,15 +2,20 @@ import { AsteroidsData } from '@/types/interfaces';
 import axios from './axios';
 import { API_KEY } from './axios';
 
-const getAllAsteroids = async (): Promise<AsteroidsData> => {
-  const date = new Date();
-  const day = date.getDay() >= 10 ? date.getDay().toString : `0${date.getDay()}`;
-  const month = date.getMonth() >= 10 ? date.getMonth.toString() : `0${date.getMonth()}`;
-  const year = date.getFullYear().toString();
-  const startDate = [year, month, day].join('-');
+interface GetAllAsteroidsParams {
+  startDate: string;
+  endDate: string;
+}
 
+const getAllAsteroids = async ({
+  startDate,
+  endDate,
+}: GetAllAsteroidsParams): Promise<AsteroidsData> => {
+  console.log(startDate);
   try {
-    const res = await axios.get(`?start_date=${startDate}&api_key=${API_KEY}`);
+    const res = await axios.get(
+      `/feed?start_date=${startDate}&end_date=${endDate}&api_key=${API_KEY}`,
+    );
 
     if (!res.data) throw new Error("Can't fetch data");
 

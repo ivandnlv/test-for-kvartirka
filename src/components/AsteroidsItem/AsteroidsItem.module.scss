@@ -69,3 +69,16 @@
   height: 40px;
   object-fit: cover;
 }
+
+.inCart {
+  button {
+    cursor: default;
+    background: rgba(248, 102, 0, 0.15);
+    &:hover {
+      background: rgba(248, 102, 0, 0.15);
+    }
+    &:active {
+      background: rgba(248, 102, 0, 0.15);
+    }
+  }
+}
