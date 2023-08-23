@@ -11,7 +11,6 @@ const getAllAsteroids = async ({
   startDate,
   endDate,
 }: GetAllAsteroidsParams): Promise<AsteroidsData> => {
-  console.log(startDate);
   try {
     const res = await axios.get(
       `/feed?start_date=${startDate}&end_date=${endDate}&api_key=${API_KEY}`,

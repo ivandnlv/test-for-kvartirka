@@ -83,39 +83,7 @@ const AsteroidsList = ({ addToCart, deleteFromCart }: AsteroidsListProps) => {
 
   useEffect(() => {
     if (data) {
-      console.log(data);
-      setAsteroids(
-        data.near_earth_objects
-          .map((item) => {
-            let endDate = '';
-            let kmDistance = '';
-            let loDistance = '';
-
-            const currentYear = new Date().getFullYear();
-            item.close_approach_data.forEach((approach) => {
-              const approachYear = new Date(approach.close_approach_date).getFullYear();
-
-              if (approachYear >= currentYear && approachYear - currentYear <= 10) {
-                endDate = approach.close_approach_date;
-                kmDistance = approach.miss_distance.kilometers;
-                loDistance = approach.miss_distance.lunar;
-              }
-            });
-
-            return {
-              id: item.id,
-              endDate,
-              kmDistance,
-              loDistance,
-              radius: item.estimated_diameter.meters.estimated_diameter_min,
-              isDanger: item.is_potentially_hazardous_asteroid,
-            };
-          })
-          .filter(
-            (asteroid) =>
-              asteroid.endDate && asteroid.kmDistance && asteroid.loDistance && asteroid.radius,
-          ),
-      );
+      setLoading(false);
     }
   }, [data]);
 
