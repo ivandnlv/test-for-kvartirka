@@ -1,0 +1,18 @@
+@import '../../../sass/variables';
+
+.btn {
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 700;
+  background: $main-color;
+  color: #fff;
+  border: none;
+  outline: none;
+  transition: background $animation-duration ease-in-out;
+  &:hover {
+    background: lighten($main-color, 15%);
+  }
+  &:active {
+    background: darken($main-color, 15%);
+  }
+}

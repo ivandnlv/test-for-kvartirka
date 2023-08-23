@@ -18,6 +18,8 @@ a {
 }
 
 .main {
-  display: flex;
-  gap: 50px;
+  position: relative;
+  &__earth {
+    position: fixed;
+  }
 }

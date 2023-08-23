@@ -1,0 +1,71 @@
+.asteroid {
+  margin-top: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-height: 112px;
+}
+
+.date {
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.info {
+  display: flex;
+  gap: 8px;
+}
+
+.destination {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.img {
+  display: flex;
+  gap: 8px;
+  div {
+    a {
+      font-size: 16px;
+      font-weight: 700;
+      display: block;
+      text-decoration: underline;
+    }
+    span {
+      font-size: 12px;
+      font-style: normal;
+      font-weight: 400;
+    }
+  }
+}
+
+.bottom {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  button {
+    text-transform: uppercase;
+    padding: 2px 11px;
+    border-radius: 16px;
+  }
+  span {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+  }
+}
+
+.small {
+  width: 24px;
+  height: 22px;
+  object-fit: cover;
+}
+
+.big {
+  width: 37px;
+  height: 40px;
+  object-fit: cover;
+}
