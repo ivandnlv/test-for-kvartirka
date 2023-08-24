@@ -1,36 +1,37 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 import AsteroidsList from '../AsteroidsList';
 import { Asteroid } from '@/types/interfaces';
+import Cart from '../Cart';
 
-interface Cart {
-  items: Asteroid[] | null;
-}
+export type CartType = Asteroid[] | null;
 
 const AsteroidsContainer = () => {
-  const [cart, setCart] = useState<Cart>({
-    items: null,
-  });
+  const [cart, setCart] = useState<CartType>(null);
 
   const addToCart = (asteroid: Asteroid) => {
-    setCart((prev) => ({ ...prev, items: prev.items ? [...prev.items, asteroid] : [asteroid] }));
+    setCart((prev) => (prev ? [...prev, asteroid] : [asteroid]));
   };
 
   const deleteFromCart = (asteroid: Asteroid) => {
-    setCart((prev) => ({
-      ...prev,
-      items: prev.items ? prev.items.filter((item) => item.id !== asteroid.id) : null,
-    }));
+    setCart((prev) => (prev ? prev.filter((item) => item.id !== asteroid.id) : null));
+  };
+
+  const deleteCart = () => {
+    setCart(null);
   };
 
   useEffect(() => {
-    console.log(cart);
+    if (!cart?.length) {
+      setCart(null);
+    }
   }, [cart]);
 
   return (
     <>
-      <AsteroidsList addToCart={addToCart} deleteFromCart={deleteFromCart} />
+      <AsteroidsList addToCart={addToCart} deleteFromCart={deleteFromCart} cart={cart} />
+      <Cart cart={cart} deleteCart={deleteCart} />
     </>
   );
 };

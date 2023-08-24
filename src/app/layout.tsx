@@ -22,10 +22,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="ru">
       <body className={helvetica.className}>
         <Header />
-        <main className="main">
+        <div className="main" id="main">
           <Image src={earthPath} alt="earth" className="main__earth" />
           {children}
-        </main>
+        </div>
       </body>
     </html>
   );

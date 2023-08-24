@@ -4,9 +4,11 @@ import { useState, useEffect } from 'react';
 import AsteroidsTabs from '../AsteroidsTabs';
 import styles from './AsteroidsList.module.scss';
 import { getAllAsteroids } from '@/services/asteroids';
-import { AsteroidsData, Asteroid } from '@/types/interfaces';
+import { AsteroidsData, Asteroid, NearEarth } from '@/types/interfaces';
 import AsteroidsItem from '../AsteroidsItem';
-import { getDaysInMonth } from '@/utils/constants';
+import { useInView } from 'react-intersection-observer';
+import moment from 'moment';
+import { CartType } from '../AsteroidsContainer';
 
 export type Tab = {
   title: string;
@@ -18,62 +20,54 @@ const tabs: Tab[] = [
   { title: 'в лунных орбитах', value: 'lo' },
 ];
 
-const startDateInit = () => {
-  const date = new Date();
-  const day = date.getDay() >= 10 ? date.getDay().toString : `0${date.getDay()}`;
-  const month = date.getMonth() >= 10 ? date.getMonth.toString() : `0${date.getMonth()}`;
-  const year = date.getFullYear().toString();
-
-  return [year, month, day].join('-');
-};
-
-const endDateInit = (date: string): string => {
-  const dateArr = date.split('-');
-  const day = dateArr[2];
-  const month = dateArr[1];
-  const year = dateArr[0];
-
-  const endDateStep = 7;
-
-  // const isLastMonth = Number(month) === 12;
-
-  // if (isLastMonth )
-
-  const maxDaysInMonth = getDaysInMonth(Number(month));
-
-  if (Number(day) + endDateStep >= maxDaysInMonth) {
-    return [year, Number(month) + 1, endDateStep - (maxDaysInMonth - Number(day))].join('-');
-  } else {
-    return [year, month, Number(day) + endDateStep].join('-');
-  }
-};
-
 interface AsteroidsListProps {
   addToCart: (asteroid: Asteroid) => void;
   deleteFromCart: (asteroid: Asteroid) => void;
+  cart: CartType;
 }
 
-const AsteroidsList = ({ addToCart, deleteFromCart }: AsteroidsListProps) => {
+type Status = 'firstLoading' | 'success' | 'error' | 'loading';
+
+const AsteroidsList = ({ addToCart, deleteFromCart, cart }: AsteroidsListProps) => {
   const [pathType, setPathType] = useState<Tab['value']>('km');
-  const [error, setError] = useState<any | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [status, setStatus] = useState<Status>('loading');
   const [data, setData] = useState<AsteroidsData | null>(null);
   const [asteroids, setAsteroids] = useState<Asteroid[] | null>(null);
 
+  const dateStep = 7;
+
+  const [firstStartDate, setFirstStartDate] = useState<string | null>(null);
+  const [startDate, setStartDate] = useState<string>(moment().format('YYYY-MM-DD'));
+  const [endDate, setEndDate] = useState<string>(
+    moment().add(dateStep, 'days').format('YYYY-MM-DD'),
+  );
+
+  const { ref, inView } = useInView({
+    threshold: 0.5,
+  });
+
   const getData = async () => {
     try {
-      const startDate = startDateInit();
-      const endDate = endDateInit(startDate);
+      if (!firstStartDate) {
+        setStatus('firstLoading');
+        setFirstStartDate(startDate);
+      } else {
+        setStatus('loading');
+        const newEndDate = moment(endDate).add(dateStep, 'days').format('YYYY-MM-DD');
+        setStartDate(endDate);
+        setEndDate(newEndDate);
+      }
+
       const asteroidsData = await getAllAsteroids({ startDate, endDate });
 
       if (!asteroidsData) {
-        setError('Произошла ошибка при загрузке данных');
+        setStatus('error');
         return;
       }
 
       setData(asteroidsData);
     } catch (error) {
-      setError('Произошла ошибка при загрузке данных');
+      setStatus('error');
     }
   };
 
@@ -82,28 +76,51 @@ const AsteroidsList = ({ addToCart, deleteFromCart }: AsteroidsListProps) => {
   }, []);
 
   useEffect(() => {
+    if (inView) {
+      getData();
+    }
+  }, [inView]);
+
+  useEffect(() => {
     if (data) {
-      setLoading(false);
+      for (let key in data.near_earth_objects) {
+        const { id, close_approach_data, estimated_diameter, is_potentially_hazardous_asteroid } =
+          data.near_earth_objects[key as keyof NearEarth][0];
+        const {
+          close_approach_date,
+          miss_distance: { kilometers, lunar },
+        } = close_approach_data[0];
+
+        const asteroid: Asteroid = {
+          id,
+          endDate: close_approach_date,
+          isDanger: is_potentially_hazardous_asteroid,
+          kmDistance: kilometers,
+          loDistance: lunar,
+          radius: estimated_diameter.meters.estimated_diameter_min,
+        };
+
+        let isInAsteroids = false;
+
+        if (asteroids) {
+          asteroids.forEach((astr) => {
+            if (astr.id === asteroid.id) {
+              isInAsteroids = true;
+            }
+          });
+        }
+
+        if (!isInAsteroids) setAsteroids((prev) => (prev ? [...prev, asteroid] : [asteroid]));
+      }
+
+      setStatus('success');
     }
   }, [data]);
 
-  useEffect(() => {
-    if (asteroids) {
-      setLoading(false);
-    }
-  }, [asteroids]);
-
-  useEffect(() => {
-    if (error) {
-      setLoading(false);
-    }
-  }, [error]);
-
   return (
-    <div className={styles.asteroids}>
-      {loading ? (
-        <h3>Загружаем данные...</h3>
-      ) : !error && asteroids ? (
+    <div className={styles.asteroids} id="asteroids">
+      {status === 'firstLoading' ? <h3>Загружаем данные...</h3> : null}{' '}
+      {asteroids ? (
         <>
           <AsteroidsTabs tabs={tabs} onSelect={setPathType} currentTab={pathType} />
           {asteroids.map((asteroid) => (
@@ -113,12 +130,14 @@ const AsteroidsList = ({ addToCart, deleteFromCart }: AsteroidsListProps) => {
               measurementUnit={pathType}
               addToCart={addToCart}
               deleteFromCart={deleteFromCart}
+              cart={cart}
             />
           ))}
+          <div ref={ref} className={styles.empty}></div>
         </>
-      ) : error && !asteroids ? (
-        <h3>Произошла ошибка</h3>
       ) : null}
+      {status === 'loading' ? <h3>Подгружаем данные...</h3> : null}
+      {status === 'error' ? <h3>Произошла ошибка</h3> : null}
     </div>
   );
 };

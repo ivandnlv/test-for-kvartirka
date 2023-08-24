@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Asteroid } from '@/types/interfaces';
 import styles from './AsteroidsItem.module.scss';
 import Image from 'next/image';
@@ -9,12 +9,14 @@ import arrowIconPath from './arrow.svg';
 import dangerIconPath from './danger.svg';
 
 import Btn from '../UI/Btn';
+import { CartType } from '../AsteroidsContainer';
 
 interface AsteroidsItemProps {
   asteroid: Asteroid;
   measurementUnit: 'km' | 'lo';
   addToCart: (asteroid: Asteroid) => void;
   deleteFromCart: (asteroid: Asteroid) => void;
+  cart: CartType;
 }
 
 type NormalDate = [number, string, number];
@@ -51,6 +53,7 @@ const AsteroidsItem = ({
   measurementUnit,
   addToCart,
   deleteFromCart,
+  cart,
 }: AsteroidsItemProps) => {
   const normalDate = formatDate(asteroid);
   const asteroidSize = asteroid.radius >= 10000 ? 'big' : 'small';
@@ -67,17 +70,38 @@ const AsteroidsItem = ({
     }
   };
 
+  const kmDistance = Math.floor(Number(asteroid.kmDistance)).toLocaleString();
+  const loDistance = Math.floor(Number(asteroid.loDistance));
+
+  function correctLo(): string {
+    if (loDistance === 1) {
+      return 'лунная орбита';
+    } else if (loDistance <= 4) {
+      return 'лунные орбиты';
+    } else {
+      return 'лунных орбит';
+    }
+  }
+
+  useEffect(() => {
+    if (!cart) {
+      setIsInCart(false);
+    }
+  }, [cart]);
+
   return (
     <div className={styles.asteroid}>
       <div className={styles.date}>{`${normalDate.join(' ')}`}</div>
       <div className={styles.info}>
         <div className={styles.destination}>
           {measurementUnit === 'km' ? (
-            <span>{Math.floor(Number(asteroid.kmDistance)).toLocaleString()} км</span>
+            <span>{kmDistance} км</span>
           ) : (
-            <span>{Math.floor(Number(asteroid.loDistance)).toLocaleString()} ло</span>
+            <span>
+              {loDistance.toLocaleString()} {correctLo()}
+            </span>
           )}
-          <Image src={arrowIconPath} alt="arrow-icon" />
+          <Image src={arrowIconPath} alt="arrow-icon" className={styles.arrow} />
         </div>
         <div className={styles.img}>
           <Image

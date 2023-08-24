@@ -3,6 +3,24 @@ type Diameter = {
   estimated_diameter_max: number;
 };
 
+interface CloseApproach {
+  close_approach_date: string;
+  close_approach_date_full: string;
+  epoch_date_close_approach: number;
+  relative_velocity: {
+    kilometers_per_second: string;
+    kilometers_per_hour: string;
+    miles_per_hour: string;
+  };
+  miss_distance: {
+    astronomical: string;
+    lunar: string;
+    kilometers: string;
+    miles: string;
+  };
+  orbiting_body: string;
+}
+
 interface NearEarthValue {
   links: {
     self: string;
@@ -19,9 +37,11 @@ interface NearEarthValue {
     feet: Diameter;
   };
   is_potentially_hazardous_asteroid: boolean;
+  close_approach_data: CloseApproach[];
+  is_sentry_object: boolean;
 }
 
-interface NearEarth {
+export interface NearEarth {
   [key: string]: NearEarthValue[];
 }
 
@@ -32,5 +52,5 @@ export interface AsteroidsData {
     self: string;
   };
   element_count: number;
-  near_earth_objects: NearEarth[];
+  near_earth_objects: NearEarth;
 }
