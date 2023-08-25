@@ -19,7 +19,12 @@ a {
 
 .main {
   position: relative;
+  flex: 1 1 auto;
   &__earth {
     position: fixed;
   }
+}
+
+.footer {
+  padding: 16px;
 }

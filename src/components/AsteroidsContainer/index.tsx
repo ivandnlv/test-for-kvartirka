@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import AsteroidsList from '../AsteroidsList';
 import { Asteroid } from '@/types/interfaces';
 import Cart from '../Cart';
@@ -8,6 +8,7 @@ import Cart from '../Cart';
 export type CartType = Asteroid[] | null;
 
 const AsteroidsContainer = () => {
+  const [isCartSended, setIsCartSended] = useState(false);
   const [cart, setCart] = useState<CartType>(null);
 
   const addToCart = (asteroid: Asteroid) => {
@@ -18,8 +19,8 @@ const AsteroidsContainer = () => {
     setCart((prev) => (prev ? prev.filter((item) => item.id !== asteroid.id) : null));
   };
 
-  const deleteCart = () => {
-    setCart(null);
+  const sendCart = () => {
+    setIsCartSended(true);
   };
 
   useEffect(() => {
@@ -30,8 +31,13 @@ const AsteroidsContainer = () => {
 
   return (
     <>
-      <AsteroidsList addToCart={addToCart} deleteFromCart={deleteFromCart} cart={cart} />
-      <Cart cart={cart} deleteCart={deleteCart} />
+      <AsteroidsList
+        addToCart={addToCart}
+        deleteFromCart={deleteFromCart}
+        cart={cart}
+        isCartSended={isCartSended}
+      />
+      {!isCartSended ? <Cart cart={cart} sendCart={sendCart} /> : null}
     </>
   );
 };

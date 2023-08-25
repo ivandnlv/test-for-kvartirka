@@ -21,7 +21,7 @@ interface CloseApproach {
   orbiting_body: string;
 }
 
-interface NearEarthValue {
+export interface NearEarthValue {
   links: {
     self: string;
   };

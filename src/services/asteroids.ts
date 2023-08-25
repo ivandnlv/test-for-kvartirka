@@ -1,4 +1,4 @@
-import { AsteroidsData } from '@/types/interfaces';
+import { AsteroidData, AsteroidsData } from '@/types/interfaces';
 import axios from './axios';
 import { API_KEY } from './axios';
 
@@ -16,12 +16,20 @@ const getAllAsteroids = async ({
       `/feed?start_date=${startDate}&end_date=${endDate}&api_key=${API_KEY}`,
     );
 
-    if (!res.data) throw new Error("Can't fetch data");
+    if (!res.data) throw new Error('Не удалось получить данные');
 
     return res.data;
   } catch (error) {
-    throw new Error("Can't fetch data");
+    throw new Error('Не удалось получить данные');
   }
 };
 
-export { getAllAsteroids };
+const getAsteroid = async (id: string): Promise<AsteroidData> => {
+  const res = await axios.get(`/neo/${id}?api_key=${API_KEY}`);
+
+  if (!res.data) throw new Error('Не удалось получить данные о данном астероиде');
+
+  return res.data;
+};
+
+export { getAllAsteroids, getAsteroid };

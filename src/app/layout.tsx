@@ -26,6 +26,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <Image src={earthPath} alt="earth" className="main__earth" />
           {children}
         </div>
+        <footer className="footer">© Все права и планета защищены</footer>
       </body>
     </html>
   );

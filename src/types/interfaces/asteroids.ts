@@ -5,4 +5,6 @@ export interface Asteroid {
   isDanger: boolean;
   radius: number;
   id: string;
+  name: string;
+  link: string;
 }

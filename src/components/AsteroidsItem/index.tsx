@@ -10,6 +10,7 @@ import dangerIconPath from './danger.svg';
 
 import Btn from '../UI/Btn';
 import { CartType } from '../AsteroidsContainer';
+import Link from 'next/link';
 
 interface AsteroidsItemProps {
   asteroid: Asteroid;
@@ -17,6 +18,7 @@ interface AsteroidsItemProps {
   addToCart: (asteroid: Asteroid) => void;
   deleteFromCart: (asteroid: Asteroid) => void;
   cart: CartType;
+  isFromCart?: boolean;
 }
 
 type NormalDate = [number, string, number];
@@ -54,6 +56,7 @@ const AsteroidsItem = ({
   addToCart,
   deleteFromCart,
   cart,
+  isFromCart = false,
 }: AsteroidsItemProps) => {
   const normalDate = formatDate(asteroid);
   const asteroidSize = asteroid.radius >= 10000 ? 'big' : 'small';
@@ -110,13 +113,15 @@ const AsteroidsItem = ({
             alt="asteroid-img"
           />
           <div>
-            <a href="#">2021 FQ</a>
+            <Link href={`asteroids/${asteroid.id}`}>{asteroid.name}</Link>
             <span>Ø {Math.floor(asteroid.radius).toLocaleString()} м</span>
           </div>
         </div>
       </div>
       <div className={isInCart ? styles.bottom + ' ' + styles.inCart : styles.bottom}>
-        <Btn title={isInCart ? 'В корзине' : 'Заказать'} click={onBtnClick} />
+        {!isFromCart ? (
+          <Btn title={isInCart ? 'В корзине' : 'Заказать'} click={onBtnClick} />
+        ) : null}
         {asteroid.isDanger ? (
           <span>
             <Image src={dangerIconPath} alt="⚠" />

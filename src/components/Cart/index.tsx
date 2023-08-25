@@ -9,14 +9,14 @@ import Btn from '../UI/Btn';
 
 interface CartProps {
   cart: CartType;
-  deleteCart: () => void;
+  sendCart: () => void;
 }
 
-const Cart = ({ cart, deleteCart }: CartProps) => {
+const Cart = ({ cart, sendCart }: CartProps) => {
   const [isComplete, setIsComplete] = useState(false);
 
   const onSendClick = () => {
-    deleteCart();
+    sendCart();
     setIsComplete(true);
   };
 
@@ -37,26 +37,24 @@ const Cart = ({ cart, deleteCart }: CartProps) => {
 
   return (
     <div className={styles.cart}>
-      <div className={styles.title}>Корзина</div>
-      {isComplete ? (
-        <>
-          <div className={styles.count}>
-            <Image src={completeIconPath} alt="complete" />
-          </div>
-          <div className={styles.btn}>
-            <Btn click={onBackClick} title="Назад" />
-          </div>
-        </>
-      ) : (
-        <>
-          <div className={styles.count}>
-            {cart ? `${cart.length} ${asteroidWordFormat()}` : 'Пусто'}
-          </div>
-          <div className={styles.btn}>
-            {cart ? <Btn click={onSendClick} title="Отправить" /> : null}
-          </div>
-        </>
-      )}
+      <div className={styles.top}>
+        <div className={styles.title}>Корзина</div>
+        <div className={styles.count}>
+          {cart && !isComplete
+            ? `${cart.length} ${asteroidWordFormat()}`
+            : !isComplete
+            ? 'Пусто'
+            : null}
+          {isComplete ? <Image src={completeIconPath} alt="complete" /> : null}
+        </div>
+      </div>
+      <div className={styles.btn}>
+        {cart ? (
+          <Btn click={onSendClick} title="Отправить" />
+        ) : isComplete ? (
+          <Btn click={onBackClick} title="Назад" />
+        ) : null}
+      </div>
     </div>
   );
 };
