@@ -16,7 +16,7 @@ const AsteroidInfo = ({
       <h3 className={styles.title}>Имя астероида: {name}</h3>
       <div className={styles.diameters}>
         <h4>Диаметры:</h4>
-        <ul>
+        <ul className={styles.list}>
           <li>{diameters.feet.estimated_diameter_min.toFixed(1)} футов</li>
           <li>{diameters.kilometers.estimated_diameter_min.toFixed(1)} километров</li>
           <li>{diameters.meters.estimated_diameter_min.toFixed(1)} метров</li>
