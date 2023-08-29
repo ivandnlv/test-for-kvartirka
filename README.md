@@ -20,11 +20,12 @@ yarn
 yarn dev
 ```
 
-![image](https://github.com/ivandnlv/test-for-kvartirka/assets/91759945/c1eb6a4c-5793-469a-8939-06412fd5f204)
+![image](https://github.com/ivandnlv/test-for-kvartirka/assets/91759945/1acdc6b6-c043-4bce-913b-f85e4da4653a)
+
 
 ## Задание:
 
-![image](https://github.com/ivandnlv/test-for-kvartirka/assets/91759945/f8d81d15-6b94-4124-b089-d1796991239f)
+![image](https://github.com/ivandnlv/test-for-kvartirka/assets/91759945/f8bc2488-4617-4c70-afc4-ada227891b3e)
+![image](https://github.com/ivandnlv/test-for-kvartirka/assets/91759945/c5e6af77-ede1-4005-8773-4c503c0d7423)
 
-![image](https://github.com/ivandnlv/test-for-kvartirka/assets/91759945/1ae633eb-4adf-42f3-af3c-5a0defb08020)
 
