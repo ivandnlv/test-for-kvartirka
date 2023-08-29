@@ -12,15 +12,15 @@ const AsteroidInfo = ({
   asteroid: { approachData, diameters, isDanger, name },
 }: AsteroidInfoProps) => {
   return (
-    <div className={styles.asteroid}>
+    <>
       <h3 className={styles.title}>Имя астероида: {name}</h3>
       <div className={styles.diameters}>
-        <div>Диаметры:</div>
+        <h4>Диаметры:</h4>
         <ul>
-          <li>{diameters.feet.estimated_diameter_min}</li>
-          <li>{diameters.kilometers.estimated_diameter_min}</li>
-          <li>{diameters.meters.estimated_diameter_min}</li>
-          <li>{diameters.miles.estimated_diameter_min}</li>
+          <li>{diameters.feet.estimated_diameter_min.toFixed(1)} футов</li>
+          <li>{diameters.kilometers.estimated_diameter_min.toFixed(1)} километров</li>
+          <li>{diameters.meters.estimated_diameter_min.toFixed(1)} метров</li>
+          <li>{diameters.miles.estimated_diameter_min.toFixed(1)} миль</li>
         </ul>
       </div>
       {isDanger ? (
@@ -30,17 +30,17 @@ const AsteroidInfo = ({
         </div>
       ) : null}
       <div className={styles.approach}>
-        <div>Даты сближений: </div>
+        <h4>Даты сближений: </h4>
         <div className={styles.wrapper}>
-          {approachData.map((approachItem) => (
-            <div className={styles['approach-item']}>
+          {approachData.map((approachItem, i) => (
+            <div className={styles['approach-item']} key={i}>
               <div>
                 Дата сближения:{' '}
                 <b>{moment(approachItem.close_approach_date).format('DD.MM.YYYY')}</b>
               </div>
               <div>
-                Скорость относительно земли(км/ч):{' '}
-                <b>{approachItem.relative_velocity.kilometers_per_hour}</b>
+                Скорость относительно земли: <br />
+                <b>{Math.floor(Number(approachItem.relative_velocity.kilometers_per_hour))} км/ч</b>
               </div>
               <div>
                 Время максимального сближения с Землей:{' '}
@@ -70,7 +70,7 @@ const AsteroidInfo = ({
           ))}
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

@@ -1,8 +1,7 @@
 import Header from '@/components/Header';
+import EarthImage from '@/components/EarthImage';
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
-import Image from 'next/image';
-import earthPath from './earth.png';
 
 import './globals.scss';
 const helvetica = localFont({
@@ -23,7 +22,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className={helvetica.className}>
         <Header />
         <div className="main" id="main">
-          <Image src={earthPath} alt="earth" className="main__earth" />
+          <EarthImage />
           {children}
         </div>
         <footer className="footer">© Все права и планета защищены</footer>

@@ -1,2 +1,7 @@
 $animation-duration: 0.2s;
 $main-color: #f86600;
+$margin-left: 527px;
+
+@media (max-width: 1200px) {
+  $margin-left: 361px;
+}

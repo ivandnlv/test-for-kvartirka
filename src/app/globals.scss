@@ -20,9 +20,8 @@ a {
 .main {
   position: relative;
   flex: 1 1 auto;
-  &__earth {
-    position: fixed;
-  }
+  display: flex;
+  gap: 57px;
 }
 
 .footer {

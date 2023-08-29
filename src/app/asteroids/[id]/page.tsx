@@ -5,7 +5,7 @@ import { getAsteroid } from '@/services/asteroids';
 import { AsteroidData } from '@/types/interfaces';
 import AsteroidInfo from '@/components/AsteroidInfo';
 
-import styles from './AsteroidInfo.module.scss';
+import styles from './AsteroidInfoPage.module.scss';
 
 interface AsteroidProps {
   params: {
@@ -51,7 +51,7 @@ export default function Asteroid({ params: { id } }: AsteroidProps) {
   }, [data]);
 
   return (
-    <div className={styles.asteroid}>
+    <div className={styles.info}>
       {loading ? <h3>Загрузка...</h3> : null}
       {asteroidInfo ? <AsteroidInfo asteroid={asteroidInfo} /> : null}
     </div>

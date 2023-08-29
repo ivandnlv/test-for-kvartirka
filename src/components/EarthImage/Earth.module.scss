@@ -1,0 +1,16 @@
+.earth {
+  top: 20px;
+  position: -webkit-sticky;
+  position: sticky;
+  width: 400px;
+  height: 620px;
+  @media (max-width: 1300px) {
+    width: 304px;
+    height: 436px;
+  }
+  @media (max-width: 584px) {
+    width: 48px;
+    object-fit: cover;
+    object-position: right;
+  }
+}

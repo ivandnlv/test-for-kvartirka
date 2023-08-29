@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import AsteroidsList from '../AsteroidsList';
 import { Asteroid } from '@/types/interfaces';
 import Cart from '../Cart';
